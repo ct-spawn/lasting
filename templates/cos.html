@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LB Players Search</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/top15">Weekly Top 15</a></li>
+                <li><a href="/top15today">Daily Top 15</a></li>
+                <li><a class="active" href="/search">Search</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+    <section class="custom-list">
+        <h2>LB Players Search</h2>
+        <center>
+        <form action="/players" method="post">
+            <textarea maxlength="2550" name="search" id="search" placeholder="Enter player name and every name on one line exemple:\n\nct spawn\ns2mple\na i n a\neewp\ndrunk zombie\nayman\nziad\n[d]evice\nbomzaqdgirl\nkurdi\nkurdo\nayoub\nfreehat\nluq\nabuhajjar\naboyahya\ncsf\ncommando\nfares" cols="100" rows="22" required></textarea>
+            <div>
+                <button class="button-3" type="submit">Search</button>
+            </div>
+            
+        </form>
+    </center>
+    </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 CT Spawn</p>
+    </footer>
+    <script>
+        var textAreas = document.getElementsByTagName('textarea');
+        Array.prototype.forEach.call(textAreas, function(elem) {
+            elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+        });
+    </script>
+</body>
+</html>
+
