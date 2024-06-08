@@ -2,7 +2,6 @@ import requests as req
 from xml.etree.ElementTree import fromstring
 import pymysql
 import datetime
-import threading
 import time
 
 
@@ -91,37 +90,39 @@ def update_week():
         cursor.close()
     conn.close()
 def check_new_day():
-    print("check_new_day start")
-    current_day=0
-    while True:
-        founder_file()
-        conn = pymysql.connect( 
-            host=MYSQL_HOST, 
-            user=MYSQL_USER,  
-            password = MYSQL_PASS, 
-            db=MYSQL_DATABASE,
-        port=18000, 
-            )
-        
-        cursor = conn.cursor()
-        # تنفيذ الاستعلام لاختيار كل الصفوف
-        cursor.execute("SELECT * FROM day where name='day';")
-        row = cursor.fetchone()
-        cursor.close()
-        current_day=row[1]
-        time.sleep(60)
-        new_day = datetime.date.today().day
-        if new_day != current_day:
+    try:
+        print("check_new_day start")
+        current_day=0
+        while True:
+            founder_file()
+            conn = pymysql.connect( 
+                host=MYSQL_HOST, 
+                user=MYSQL_USER,  
+                password = MYSQL_PASS, 
+                db=MYSQL_DATABASE,
+            port=18000, 
+                )
+            
             cursor = conn.cursor()
-            cursor.execute(f"""UPDATE day
-                            SET today = {new_day} WHERE name='day';
-                            """)
-            conn.commit()
+            # تنفيذ الاستعلام لاختيار كل الصفوف
+            cursor.execute("SELECT * FROM day where name='day';")
+            row = cursor.fetchone()
             cursor.close()
-            update_week()
-        conn.close()
-thread_1 = threading.Thread(target=check_new_day, args=())
-#thread_1.start()
+            current_day=row[1]
+            time.sleep(60)
+            new_day = datetime.date.today().day
+            if new_day != current_day:
+                cursor = conn.cursor()
+                cursor.execute(f"""UPDATE day
+                                SET today = {new_day} WHERE name='day';
+                                """)
+                conn.commit()
+                cursor.close()
+                update_week()
+            conn.close()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
 def calc():
     reqo=None
@@ -166,11 +167,13 @@ def calc():
                     cursor.close()
             conn2.close()
 def work_calc():
-    print("work_calc start")
-    while True:
-        calc()
-        time.sleep(60)
-thread_2 = threading.Thread(target=work_calc, args=())
-#thread_2.start()
+    try:
+        print("work_calc start")
+        while True:
+            calc()
+            time.sleep(60)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 print("ready ..")
 

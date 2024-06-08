@@ -4,7 +4,9 @@ from os.path import join
 from markupsafe import escape
 from os import _exit
 import pymysql
-from counter import thread_1,thread_2,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE
+from counter import work_calc,check_new_day,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE
+import threading
+import time
 
 MAX_SIZE=2854
 
@@ -101,9 +103,27 @@ def handler(signum, frame):
 
 signal.signal(signal.SIGINT, handler)
 
+def monitor_and_restart_thread():
+    global thread_1,thread_2
+    while True:
+        if not thread_1.is_alive():
+            print("Thread check_new_day has stopped. Restarting...")
+            thread_1 = threading.Thread(target=check_new_day)
+            thread_1.start()
+        if not thread_2.is_alive():
+            print("Thread work_calc has stopped. Restarting...")
+            thread_2 = threading.Thread(target=work_calc)
+            thread_2.start()
+        time.sleep(5)  # تحقق كل 5 ثوانٍ
 
+thread_1 = threading.Thread(target=check_new_day)
 thread_1.start()
+thread_2 = threading.Thread(target=work_calc)
 thread_2.start()
+time.sleep(5)
+monitoring_thread = threading.Thread(target=monitor_and_restart_thread)
+monitoring_thread.start()
+
 app = Flask(__name__)
 
 @app.route('/favicon.ico')
