@@ -4,7 +4,6 @@ import pymysql
 import datetime
 import time
 
-current_day=0
 MYSQL_HOST = "lastingbeasts-kali-f4ca.f.aivencloud.com"
 MYSQL_DATABASE = "defaultdb"
 MYSQL_USER = "avnadmin"
@@ -82,15 +81,16 @@ def update_week():
     cursor.close()
     for row in rows:
         try:
-            cursor = conn.cursor()
-            cursor.execute(f"""UPDATE player_stats
-                            SET day7ago = {row[3]}, day6ago = {row[4]},day5ago = {row[5]},day4ago = {row[6]},
-                            day3ago = {row[7]},day2ago = {row[8]},yestoday = {row[9]},today = 0 WHERE name='{row[0]}';
-                            """)
-            conn.commit()
-            cursor.close()
-        except:
-            pass
+            if row is not None:
+                cursor = conn.cursor()
+                cursor.execute(f"""UPDATE player_stats
+                                SET day7ago = {row[3]}, day6ago = {row[4]},day5ago = {row[5]},day4ago = {row[6]},
+                                day3ago = {row[7]},day2ago = {row[8]},yestoday = {row[9]},today = 0 WHERE name='{row[0]}';
+                                """)
+                conn.commit()
+                cursor.close()
+        except Exception as e:
+            print(f"An error occurred: {e}")
     conn.close()
 def check_new_day():
     try:
@@ -179,7 +179,6 @@ def work_calc():
         print(f"An error occurred: {e}")
 
 def allwork():
-    global current_day
     try:
         print("allwork start")
         founder_file()
@@ -195,8 +194,8 @@ def allwork():
         # تنفيذ الاستعلام لاختيار كل الصفوف
         cursor.execute("SELECT * FROM day where name='day';")
         row = cursor.fetchone()
-        cursor.close()
         current_day=row[1]
+        cursor.close()
         conn.close()
         while True:
             time.sleep(60)
@@ -215,6 +214,21 @@ def allwork():
                                 SET today = {new_day} WHERE name='day';
                                 """)
                 conn.commit()
+                cursor.close()
+                conn.close()
+                conn = pymysql.connect( 
+                    host=MYSQL_HOST, 
+                    user=MYSQL_USER,  
+                    password = MYSQL_PASS, 
+                    db=MYSQL_DATABASE,
+                port=18000, 
+                    )
+                
+                cursor = conn.cursor()
+                # تنفيذ الاستعلام لاختيار كل الصفوف
+                cursor.execute("SELECT * FROM day where name='day';")
+                row = cursor.fetchone()
+                current_day=row[1]
                 cursor.close()
                 conn.close()
             else:
