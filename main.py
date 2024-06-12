@@ -4,11 +4,34 @@ from os.path import join
 from markupsafe import escape
 from os import _exit
 import pymysql
-from counter import allwork,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE
+from counter import create_tables,allwork,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE,MYSQL_PORT
 import threading
 import time
 
 MAX_SIZE=2854
+
+def check_table_exist(table_name):
+    conn = pymysql.connect( 
+        host=MYSQL_HOST, 
+        user=MYSQL_USER,  
+        password = MYSQL_PASS, 
+        db=MYSQL_DATABASE,
+        port=MYSQL_PORT, 
+        )
+    try:      
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT COUNT(*) 
+                FROM information_schema.tables 
+                WHERE table_schema = %s 
+                AND table_name = %s;
+            """, (MYSQL_DATABASE, table_name))
+            result = cursor.fetchone()
+            conn.close()
+            return result[0] == 1
+    except:
+        conn.close()
+
 
 def get_top15():
     conn = pymysql.connect( 
@@ -16,7 +39,7 @@ def get_top15():
         user=MYSQL_USER,  
         password = MYSQL_PASS, 
         db=MYSQL_DATABASE,
-        port=18000, 
+        port=MYSQL_PORT, 
         )
     Sql="""SELECT name,day7ago,day6ago,day5ago,day4ago,day3ago,day2ago,yestoday,today,last_played,
         day7ago+day6ago+day5ago+day4ago+day3ago+day2ago+yestoday as days_Total
@@ -39,7 +62,7 @@ def get_top15_daily():
         user=MYSQL_USER,  
         password = MYSQL_PASS, 
         db=MYSQL_DATABASE,
-        port=18000, 
+        port=MYSQL_PORT, 
         )
     Sql="""SELECT name,today,last_played 
         FROM player_stats ORDER by today DESC;"""
@@ -55,6 +78,31 @@ def get_top15_daily():
         rows2.append(row1)
     return rows2
 
+def get_top15_nightly():
+    if check_table_exist("player_night"):
+        conn = pymysql.connect( 
+            host=MYSQL_HOST, 
+            user=MYSQL_USER,  
+            password = MYSQL_PASS, 
+            db=MYSQL_DATABASE,
+            port=MYSQL_PORT, 
+            )
+        Sql="""SELECT name,nightmeres,last_played 
+            FROM player_night ORDER by nightmeres DESC;"""
+        cursor = conn.cursor()
+        cursor.execute(Sql)
+        rows = cursor.fetchmany(15)
+        cursor.close()
+        conn.close()
+        rows2=[]
+        for row in rows:
+            row1=list(row)
+            row1[0]=escape(row1[0])
+            rows2.append(row1)
+        return rows2
+    else:
+        return []
+
 def get_players(lines):
     allrows=[]
     conn = pymysql.connect( 
@@ -62,7 +110,7 @@ def get_players(lines):
         user=MYSQL_USER,  
         password = MYSQL_PASS, 
         db=MYSQL_DATABASE,
-        port=18000, 
+        port=MYSQL_PORT, 
         )
     lines01=[]
     for line in lines:
@@ -102,7 +150,7 @@ def handler(signum, frame):
     _exit(1)
 
 signal.signal(signal.SIGINT, handler)
-
+create_tables()
 def monitor_and_restart_thread():
     global thread_1
     while True:
@@ -158,6 +206,10 @@ def top15today():
     rows=get_top15_daily()
     return render_template("top15today.html",rows=rows)
 
+@app.route("/top15night")
+def top15night():
+    rows=get_top15_nightly()
+    return render_template("top15night.html",rows=rows)
 
 @app.route("/players",methods=["POST"])
 def players():
