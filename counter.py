@@ -138,10 +138,11 @@ def update_player_stats(root: xmlemlmt):
                             cursor.execute("INSERT INTO player_night VALUES (%s, %s, %s);",
                                         (name.text, now, 0))
                     conn.commit()
-                elif is_within_time_range():
-                    with conn.cursor() as cursor:
-                        cursor.execute("DROP TABLE IF EXISTS player_night;")
-                    conn.commit()
+                elif datetime.datetime.now().weekday()==5:
+                    if is_within_time_range():
+                        with conn.cursor() as cursor:
+                            cursor.execute("DROP TABLE IF EXISTS player_night;")
+                        conn.commit()
     finally:
         conn.close()
 

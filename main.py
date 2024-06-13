@@ -7,8 +7,25 @@ import pymysql
 from counter import create_tables,allwork,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE,MYSQL_PORT
 import threading
 import time
+import datetime
 
 MAX_SIZE=2854
+
+def days_until_saturday():
+    # الحصول على اليوم الحالي من الأسبوع (0 لليوم الاثنين، 6 لليوم الأحد)
+    today = datetime.datetime.now().weekday()
+    
+    # اليوم السبت هو الرقم 5
+    saturday = 5
+    
+    # حساب الأيام المتبقية حتى يوم السبت
+    days_left = (saturday - today) % 7
+    
+    # إذا كان اليوم هو السبت، نعيد 7 أيام حتى السبت التالي
+    if days_left == 0:
+        days_left = 7
+    
+    return days_left
 
 def check_table_exist(table_name):
     conn = pymysql.connect( 
@@ -79,28 +96,31 @@ def get_top15_daily():
     return rows2
 
 def get_top15_nightly():
-    if check_table_exist("player_night"):
-        conn = pymysql.connect( 
-            host=MYSQL_HOST, 
-            user=MYSQL_USER,  
-            password = MYSQL_PASS, 
-            db=MYSQL_DATABASE,
-            port=MYSQL_PORT, 
-            )
-        Sql="""SELECT name,nightmeres,last_played 
-            FROM player_night ORDER by nightmeres DESC;"""
-        cursor = conn.cursor()
-        cursor.execute(Sql)
-        rows = cursor.fetchmany(15)
-        cursor.close()
-        conn.close()
-        rows2=[]
-        for row in rows:
-            row1=list(row)
-            row1[0]=escape(row1[0])
-            rows2.append(row1)
-        return rows2
-    else:
+    try:
+        if check_table_exist("player_night"):
+            conn = pymysql.connect( 
+                host=MYSQL_HOST, 
+                user=MYSQL_USER,  
+                password = MYSQL_PASS, 
+                db=MYSQL_DATABASE,
+                port=MYSQL_PORT, 
+                )
+            Sql="""SELECT name,nightmeres,last_played 
+                FROM player_night ORDER by nightmeres DESC;"""
+            cursor = conn.cursor()
+            cursor.execute(Sql)
+            rows = cursor.fetchmany(15)
+            cursor.close()
+            conn.close()
+            rows2=[]
+            for row in rows:
+                row1=list(row)
+                row1[0]=escape(row1[0])
+                rows2.append(row1)
+            return rows2
+        else:
+            return []
+    except:
         return []
 
 def get_players(lines):
@@ -144,6 +164,8 @@ def get_players(lines):
     conn.close()
     return allrows
 
+
+
 def handler(signum, frame):    
 
     print("CTRL+C")
@@ -155,7 +177,7 @@ def monitor_and_restart_thread():
     global thread_1
     while True:
         if not thread_1.is_alive():
-            print("Thread check_new_day has stopped. Restarting...")
+            print("Thread allwork has stopped. Restarting...")
             thread_1 = threading.Thread(target=allwork)
             thread_1.start()
         time.sleep(5)  # تحقق كل 5 ثوانٍ
@@ -209,7 +231,7 @@ def top15today():
 @app.route("/top15night")
 def top15night():
     rows=get_top15_nightly()
-    return render_template("top15night.html",rows=rows)
+    return render_template("top15night.html",rows=rows,remino=days_until_saturday())
 
 @app.route("/players",methods=["POST"])
 def players():

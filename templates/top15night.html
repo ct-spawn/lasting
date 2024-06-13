@@ -22,13 +22,19 @@
         </nav>
     </header>
     <div class="container">
+        {%if remino != 7 %}
+            <h2>Remaining days until Saturday : {{remino}}</h2>
+        {% else %}
+        <h2>Today the data will be reset at 17:00</h2>
+        {% endif %}
+    {% if rows != [] %}
     <section class="top-players">
         <h2>Top 15 Players at Night</h2>
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>This Night</th>
+                    <th>Playing Time</th>
                     <th>Last played time</th>
                 </tr>
             </thead>
@@ -44,8 +50,9 @@
             </tbody>
         </table>
     </section>
-    <p style="color: red;">Warning: <span style="color: greenyellow;">“Night data” is deleted at 17:00</span></p>
-    <p style="color: green;">But it will always be available and last 23 hours, meaning from 18:00 to 17:00 the next day.</p>
+    {% endif %}
+    <p style="color: red;">Warning <span style="color: greenyellow;">:</span> <span style="color: greenyellow;"> <span style="color: aqua;">Night data</span> is deleted every week at <span style="color: aqua;">17:00</span></span></p>
+    <p style="color: greenyellow;">The data is reset on <span style="color: red;">Saturday <span style="color: aqua;">at</span> 17:00 </span>, That's why pay attention</p>
     </div>
     <footer>
         <p>&copy; 2024 CT Spawn</p>
