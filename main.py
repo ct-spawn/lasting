@@ -206,6 +206,10 @@ def not_found1(e):
 def index():
     return render_template("index.html")
 
+@app.route("/motd")
+def motd():
+    return render_template("motd.html")
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html")

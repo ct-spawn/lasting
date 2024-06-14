@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          color: #fff;
+          background-color: #000;
+          background-image: url('http://images5.alphacoders.com/669/thumb-1920-669517.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
+          user-select: none;
+        }
+
+    
+        .menu {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+    
+        .menu-item {
+          background-color: #1f1f1f;
+          border-radius: 8px;
+          margin: 8px 0;
+          transition: background-color 0.3s, transform 0.3s;
+        }
+    
+        .menu-item a {
+          color: #fff;
+          text-decoration: none;
+          font-size: 18px;
+          display: block;
+          padding: 10px 16px;
+          border-radius: 8px;
+        }
+    
+        .menu-item a i {
+          margin-right: 10px;
+          width: 18px;
+          text-align: center;
+        }
+    
+        /* Применяем стили при наведении курсора на элементы меню */
+        .menu-item:hover a {
+          background-color: #383838;
+        }
+    
+        .content {
+          padding: 20px;
+          color: #fff;
+          background-color: rgba(0, 0, 0, 0.7);
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+          font-family: "Roboto", Arial, sans-serif;
+        }
+    
+        h1 {
+          color: #ffba00;
+          border-bottom: 1px solid #aaa;
+          padding-bottom: 5px;
+          font-family: "Roboto", Arial, sans-serif;
+          text-transform: uppercase;
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+    
+        p {
+          line-height: 1.6;
+        }
+    
+        h2 {
+          color: #dfdfdf;
+          font-family: Arial, sans-serif;
+          text-transform: uppercase;
+          margin-top: 20px;
+        }
+    
+        .contacts {
+          list-style: none;
+          padding: 0;
+        }
+    
+        .contact-item {
+          display: inline-block;
+          margin: 10px;
+        }
+    
+        .contact-label {
+          color: #dfdfdf;
+          font-weight: bold;
+        }
+    
+        .contact-value {
+          color: rgb(189, 189, 189);
+          display: inline-block;
+          background-color: #333;
+          padding: 10px 20px;
+          border-radius: 20px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          font-weight: bold;
+        }
+    
+        .contact-value:hover {
+          background-color: #444;
+        }
+    
+        .status {
+          font-size: 18px;
+          text-transform: uppercase;
+          font-weight: bold;
+          margin-top: 10px;
+        }
+    
+        .vip {
+          color: #ffba00;
+        }
+    
+        .gold {
+          color: #ffd700;
+        }
+    
+        .pro {
+          color: #e03e2d;
+        }
+    
+        /* Improved styles for the privileges section */
+        .privileges {
+          margin-top: 30px;
+          border: 2px solid #ffba00;
+          border-radius: 10px;
+          padding: 20px;
+        }
+    
+        .privilege-item {
+          margin-bottom: 15px;
+        }
+    
+        .privilege-title {
+          font-size: 24px;
+          margin-bottom: 5px;
+          color: #ffba00;
+          text-align: center;
+        }
+    
+        .privilege-time {
+          font-size: 16px;
+          color: #ccc;
+          margin-top: 10px;
+          text-align: center;
+        }
+        .custom-alert {
+          position: fixed;
+          color: rgb(218, 185, 0);
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: rgb(0, 0, 0);
+          border: 1px solid rgb(199, 186, 0);
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .custom-btn {
+          color: rgb(218, 185, 0);
+          background-color: rgb(0, 0, 0);
+          border: 1px solid rgb(199, 186, 0);
+          padding: 10px;
+          border-radius: 5px;
+          margin: 0px auto;
+          text-align: center;
+        }
+        .custom-alert span {
+          color: rgb(199, 186, 0);
+          text-shadow: rgb(2, 44, 2) 1px 1px;
+        }
+        .custom-alert p{
+          color: rgb(218, 185, 0);
+          font-weight: bolder;
+        }
+    /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
+    @media screen and (min-width: 901px) {  
+          .menu-item {
+            margin: 8px 0;
+
+          } 
+          .menu-item a {
+            font-size: 18px;;
+            padding: 10px 16px;
+
+          }
+          .menu-item a i {
+            margin-right: 10px;
+            width: 18px;
+
+          }
+      
+          .content {
+            padding: 20px;
+          }
+      
+          h1 {
+            padding-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          p {
+            line-height: 1.6;
+          }
+      
+          h2 {
+            margin-top: 20px;
+          }
+      
+          .contact-item {
+            margin: 10px;
+          }
+      
+          .contact-value {
+            padding: 10px 20px;
+          }
+      
+      
+          .status {
+            font-size: 18px;
+            margin-top: 10px;
+          }
+      
+          /* Improved styles for the privileges section */
+          .privileges {
+            margin-top: 30px;
+            padding: 20px;
+          }
+          .privilege-item {
+            margin-bottom: 15px;
+          }
+      
+          .privilege-title {
+            font-size: 24px;
+            margin-bottom: 5px;
+          }
+      
+          .privilege-time {
+            font-size: 16px;
+            margin-top: 10px;
+
+          }
+      }
+      
+      /* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+      @media screen and (max-width: 900px) {
+        body{
+          font-size: 15px;
+        }
+        .menu-item {
+            margin: 4px 0;
+
+          } 
+          .menu-item a {
+            font-size: 15px;;
+            padding: 5px 8px;
+
+          }
+          .menu-item a i {
+            margin-right: 5px;
+            width: 9px;
+
+          }
+      
+          .content {
+            padding: 10px;
+          }
+      
+          h1 {
+            padding-bottom: 3px;
+            font-size: 14px;
+            margin-bottom: 10px;
+          }
+          p {
+            line-height: 1;
+          }
+      
+          h2 {
+            font-size: 14px;
+            margin-top: 10px;
+          }
+      
+          .contact-item {
+            margin: 5px;
+          }
+      
+          .contact-value {
+            padding: 8px 18px;
+            
+          }
+      
+      
+          .status {
+            font-size: 11px;
+            margin-top: 5px;
+          }
+      
+          /* Improved styles for the privileges section */
+          .privileges {
+            margin-top: 5px;
+            padding: 10px;
+            padding-bottom: 0px;
+          }
+          .privilege-item {
+            margin-bottom: 15px;
+          }
+      
+          .privilege-title {
+            font-size: 18px;
+            margin-bottom: 2px;
+          }
+      
+          .privilege-time {
+            font-size:15px;
+            margin-top: 3px;
+
+          }
+      }
+      </style>
+<style>.tsarvarW{width:100%;text-decoration:none;background:#fff;text-align:left;border-radius:10px;box-shadow:0 1px 10px -6px rgba(0,0,0,.75);overflow:hidden}.tsarvarWB{background:#181818;box-shadow:0 -2px 4px -2px rgba(0,0,0,.5),0 3px 7px -3px #000}.tsarvarW-w{position:relative;padding:15px 7px 7px 139px;min-height:124px;box-sizing:border-box}.tsarvarWC .tsarvarW-w{padding:7px}.tsarvarW-i{position:absolute;top:7px;left:7px;display:block;text-decoration:none;width:120px;min-height:110px;overflow:hidden;border-radius:5px}.tsarvarWC .tsarvarW-i{width:100%;position:relative;top:auto;left:auto}.tsarvarW-ib{position:absolute;top:-5%;left:-5%;width:110%;height:110%;filter:blur(5px);background-size:cover;background-position:center}.tsarvarW-iw{display:table;width:120px;position:absolute;left:50%;top:50%;margin:-60px 0 0 -60px}.tsarvarW-iw2{display:table-cell;height:120px;vertical-align:middle;text-align:center}.tsarvarW-i img{max-width:120px;box-shadow:-2px 0 8px -2px rgba(0,0,0,.5),2px 0 8px -2px rgba(0,0,0,.5)}.tsarvarW-n{display:block;font-size:16px;line-height:18px;text-decoration:none!important;font-weight:700;letter-spacing:.25px;color:#000;transition:color .1s}.tsarvarWB .tsarvarW-n{color:#fff}.tsarvarW-n:hover{color:#1a6dea}.tsarvarWC .tsarvarW-n{text-align:center;margin:12px 0 0 0}.tsarvarW-nl{display:inline-block;margin:0 7px 0 0;color:rgba(0,0,0,.85);font-weight:300}.tsarvarWB .tsarvarW-nl{color:rgba(255,255,255,.6)}.tsarvarWC .tsarvarW-nv{display:block;margin-top:12px}.tsarvarW-d{margin:8px 0 0 0;font-size:13px;line-height:13px}.tsarvarWC .tsarvarW-d{text-align:center}.tsarvarW-di{display:inline-block;vertical-align:middle;margin:0 12px 8px 0;color:rgba(0,0,0,.5);text-decoration:none;transition:opacity .1s}.tsarvarWB .tsarvarW-di{color:rgba(255,255,255,.35);text-shadow:0 1px 3px rgba(0,0,0,.75)}.tsarvarWC .tsarvarW-di{display:block;margin:12px 0}a.tsarvarW-di:hover{opacity:.75}.tsarvarW-s{font-size:14px;line-height:14px;text-transform:uppercase;font-weight:700;letter-spacing:.25px}.tsarvarW-sO{color:#1a6dea}.tsarvarW-vn{margin:0 0 0 7px;font-weight:700;color:rgba(0,0,0,.95)}.tsarvarWB .tsarvarW-vn{color:rgba(255,255,255,.65)}.tsarvarW-o{display:table;margin:0 auto}.tsarvarW-o1{display:table-cell;vertical-align:middle;width:16px}.tsarvarW-o2{display:table-cell;vertical-align:middle}.tsarvarW-oi{display:block;width:16px;height:16px}.tsarvarW-oc{position:relative;width:16px;height:16px;margin:0 7px 0 0;border-radius:50%}.tsarvarW-ocb{height:100%;border-radius:50%}.tsarvarW-c{border-bottom:1px solid rgba(0,0,0,.05)}.tsarvarWB .tsarvarW-c{border-bottom-color:rgba(255,255,255,.075)}.tsarvarW-ci{display:inline-block;height:24px;vertical-align:bottom;position:relative;width:4.16%}.tsarvarW-cib{display:block;position:absolute;left:0;right:2px;bottom:0;background:rgba(0,0,0,.05);border-radius:2px 2px 0 0}.tsarvarWB .tsarvarW-cib{background:rgba(255,255,255,.075)}.tsarvarW-ct{display:table;width:100%;margin:4px 0 0 0}.tsarvarW-cti{display:table-cell;vertical-align:top;width:16.66%;text-align:center;font-size:10px;line-height:10px;color:rgba(0,0,0,.5)}.tsarvarWB .tsarvarW-cti{color:rgba(255,255,255,.25)}.tsarvarW-p{padding:7px 7px 10px 10px;font-size:12px;line-height:12px;background:rgba(0,0,0,.035)}.tsarvarWB .tsarvarW-p{background:rgba(255,255,255,.015)}.tsarvarW-p>*{display:inline-block;vertical-align:top;margin:3px 3px 0 0;padding:3px 5px;color:rgba(0,0,0,.65);border-radius:5px;box-shadow:0 2px 8px -6px rgba(0,0,0,.75),0 -1px 8px -6px rgba(0,0,0,.75);background:rgba(255,255,255,.5);text-decoration:none;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .1s,background .1s}.tsarvarWB .tsarvarW-p>*{background:rgba(255,255,255,.075);color:rgba(255,255,255,.45);box-shadow:0 2px 4px -2px #000,0 -2px 4px -2px #000;text-shadow:0 1px 3px rgba(0,0,0,.75)}.tsarvarW-pH{display:none}.tsarvarW-pS .tsarvarW-pH{display:inline-block}.tsarvarW-p>*+*:hover{color:#000;background:rgba(255,255,255,.85);cursor:pointer}.tsarvarWB .tsarvarW-p>*+*:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.1)}.tsarvarW-pt{font-weight:600;box-shadow:none!important;background:none!important}.tsarvarW-p.tsarvarW-pS>.tsarvarW-ps{display:none}.tsarvarW-f{font-size:11px;line-height:12px;text-transform:uppercase}.tsarvarWC .tsarvarW-f{text-align:center}.tsarvarW-w+.tsarvarW-f{background:rgba(0,0,0,.035)}.tsarvarWB .tsarvarW-w+.tsarvarW-f{background:rgba(255,255,255,.015)}.tsarvarW-fl{display:inline-block;vertical-align:top;padding:5px 18px;text-decoration:none;color:rgba(0,0,0,.35);font-weight:700;transition:color .1s}.tsarvarWB .tsarvarW-fl{color:rgba(255,255,255,.25)}.tsarvarW-fl:hover{color:#000}.tsarvarWB .tsarvarW-fl:hover{color:rgba(255,255,255,.75)}.tsarvarW-na{text-align:center;padding:10px;font-size:12px;line-height:20px;text-transform:uppercase;color:rgba(0,0,0,.85);font-weight:700;text-decoration:none}.tsarvarWB .tsarvarW-na{color:rgba(255,255,255,.6)}</style>
+        
+<title>Lasting Beasts Server</title>
+</head>
+<body>
+    <div class="content">
+        <h1>Welcome to Lasting Beasts</h1>
+        <script type="text/javascript" charset="utf-8" src="https://widget.tsarvar.com/load.js" async=""></script>
+        <script type="text/javascript">
+          (function(k){(window[k]||(window[k]=[])).push({
+              element:'*[data-tsarvarServerId="199537"]',
+              serverId:199537,
+              serverIp:'37.230.210.5',
+              serverPort:27015,
+              blackMode:true,
+              players:false
+          });})('TsarvarWidgetQueue');
+        </script>
+        <!-- /TSARVAR WIDGET -->
+    
+        <h2>Interesting links:</h2>
+        <ul class="contacts">
+            <li class="contact-item"><span class="contact-label"><i class="fa fa-server"></i> Server IP:</span> <span class="contact-value" onclick="copyText('135.125.128.254:27015')">135.125.128.254:27015</span></li>
+            <br>
+            <li class="contact-item"><span class="contact-label"><i class="fa fa-globe"></i> Forum:</span> <span class="contact-value" onclick="copyText('https://lastingbeasts.net/forums/')">lastingbeasts.net/forums</span></li>
+            <br>
+            <li class="contact-item"><span class="contact-label"><i class="fa fa-commenting"></i> Discord:</span> <span class="contact-value" onclick="copyText('https://discord.gg/lb1')">discord.gg/lb1</span></li>
+            <br>
+            <li class="contact-item"><span class="contact-label"><i class="fa fa-comments"></i> Contact Us:</span> <span class="contact-value" onclick="copyText('https://lastingbeasts.net/forums/contact/')">lastingbeasts.net/forums/contact</span></li>
+        </ul>
+    
+        <!-- Improved privileges section -->
+        <div class="privileges">
+          <div class="privilege-item">
+            <div class="privilege-title">Privileges:</div>
+            <div class="status vip">Free VIP | 22:00 - 10:00</div>
+            <div class="status gold">Double Jump | All Time</div>
+          </div>
+        </div>
+
+      </div>
+      <script>
+        function copyText(text) {
+          if (document.getElementsByClassName("custom-alert").length==0){
+            var input = document.createElement('input');
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showAlert('Text copied to clipboard: ', text);
+          }
+        }
+      </script>
+      <script>
+        function showAlert(message0, message) {
+          // Create a custom alert box
+          const alertBox = document.createElement('div');
+          alertBox.className = 'custom-alert';
+          alertBox.innerHTML = `
+            <p><span style="font-weight: bold;">${message0}</span>${message}</p>
+            <button class="custom-btn" onclick="document.body.removeChild(this.parentElement)">OK</button>
+          `;
+          document.body.appendChild(alertBox);
+        }
+      </script>
+</body>
+</html>
