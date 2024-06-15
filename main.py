@@ -4,7 +4,7 @@ from os.path import join
 from markupsafe import escape
 from os import _exit
 import pymysql
-from counter import create_tables,allwork,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE,MYSQL_PORT
+from counter import create_tables,allwork,MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DATABASE,MYSQL_PORT,check_table_exist
 import threading
 import time
 import datetime
@@ -26,28 +26,6 @@ def days_until_saturday():
         days_left = 7
     
     return days_left
-
-def check_table_exist(table_name):
-    conn = pymysql.connect( 
-        host=MYSQL_HOST, 
-        user=MYSQL_USER,  
-        password = MYSQL_PASS, 
-        db=MYSQL_DATABASE,
-        port=MYSQL_PORT, 
-        )
-    try:      
-        with conn.cursor() as cursor:
-            cursor.execute("""
-                SELECT COUNT(*) 
-                FROM information_schema.tables 
-                WHERE table_schema = %s 
-                AND table_name = %s;
-            """, (MYSQL_DATABASE, table_name))
-            result = cursor.fetchone()
-            conn.close()
-            return result[0] == 1
-    except:
-        conn.close()
 
 
 def get_top15():

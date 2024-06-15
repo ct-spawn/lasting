@@ -21,6 +21,29 @@ def get_db_connection():
         port=MYSQL_PORT,
     )
 
+def check_table_exist(table_name):
+    conn = pymysql.connect( 
+        host=MYSQL_HOST, 
+        user=MYSQL_USER,  
+        password = MYSQL_PASS, 
+        db=MYSQL_DATABASE,
+        port=MYSQL_PORT, 
+        )
+    try:      
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT COUNT(*) 
+                FROM information_schema.tables 
+                WHERE table_schema = %s 
+                AND table_name = %s;
+            """, (MYSQL_DATABASE, table_name))
+            result = cursor.fetchone()
+            conn.close()
+            return result[0] == 1
+    except:
+        conn.close()
+        return False
+
 def create_tables():
     conn = get_db_connection()
     try:
@@ -43,6 +66,17 @@ def create_tables():
                 (name VARCHAR(50) PRIMARY KEY, last_played DATETIME,
                 nightmeres INT DEFAULT 0);''')
             
+            conn.commit()
+    finally:
+        conn.close()
+
+def create_tables_player_night():
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:   
+            cursor.execute('''CREATE TABLE IF NOT EXISTS player_night
+                (name VARCHAR(50) PRIMARY KEY, last_played DATETIME,
+                nightmeres INT DEFAULT 0);''')
             conn.commit()
     finally:
         conn.close()
@@ -127,17 +161,20 @@ def update_player_stats(root: xmlemlmt):
                                        (name.text, now, 0, 0, 0, 0, 0, 0, 0, 1))
                 conn.commit()
                 if is_between(18,10):
-                    with conn.cursor() as cursor:
-                        cursor.execute("SELECT * FROM player_night WHERE name = %s;", (name.text,))
-                        result = cursor.fetchone()
-                        if result:
-                            playtime = result[2] + 1
-                            cursor.execute("UPDATE player_night SET last_played = %s, nightmeres = %s WHERE name = %s;",
-                                        (now, playtime, name.text))
-                        else:
-                            cursor.execute("INSERT INTO player_night VALUES (%s, %s, %s);",
-                                        (name.text, now, 0))
-                    conn.commit()
+                    if check_table_exist("player_night"):
+                        with conn.cursor() as cursor:
+                            cursor.execute("SELECT * FROM player_night WHERE name = %s;", (name.text,))
+                            result = cursor.fetchone()
+                            if result:
+                                playtime = result[2] + 1
+                                cursor.execute("UPDATE player_night SET last_played = %s, nightmeres = %s WHERE name = %s;",
+                                            (now, playtime, name.text))
+                            else:
+                                cursor.execute("INSERT INTO player_night VALUES (%s, %s, %s);",
+                                            (name.text, now, 0))
+                        conn.commit()
+                    else:
+                        create_tables_player_night()
                 elif datetime.datetime.now().weekday()==5:
                     if is_within_time_range():
                         with conn.cursor() as cursor:
